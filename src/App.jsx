@@ -59,12 +59,14 @@
 // export default App; 
 
 
-import Threejs from './Threejs'
+import Practice from './Practice'
+// import Threejs from './Threejs'
 
 const App = () => {
   return (
     <div>
-      <Threejs/>
+      {/* <Threejs/> */}
+      <Practice/>
       
     </div>
   )
