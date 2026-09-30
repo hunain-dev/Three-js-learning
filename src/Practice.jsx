@@ -4,6 +4,16 @@ const Practice = () => {
 
 
     useEffect(() => {
+
+ const size = 
+ {
+    width : window.innerWidth,
+    height : window.innerHeight
+ }
+
+ 
+
+
         const scene = new THREE.Scene();
         const timer = new THREE.Timer();
      scene.background = new THREE.Color("white")
@@ -24,7 +34,7 @@ const Practice = () => {
 
         const camera = new THREE.PerspectiveCamera(
           75,
-          window.innerWidth / window.innerHeight,
+          size.innerWidth / size.innerHeight,
           0.1,
           100
         )
@@ -41,10 +51,28 @@ const Practice = () => {
   })
 
   render.setSize(
-    window.innerWidth,
-    window.innerHeight
+    size.width,
+    size.height
 )
 
+
+
+window.addEventListener("resize",()=>{
+    size.width = window.innerWidth;
+    size.height = window.innerHeight;
+
+    camera.aspect = size.width / size.height;
+    camera.updateProjectionMatrix();
+
+    render.setSize(
+        size.width,
+        size.height
+    )
+    
+    
+
+
+})
 
 
 function animate() {
