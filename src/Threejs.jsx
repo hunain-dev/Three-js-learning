@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import * as THREE from "three"
 const Threejs = () => {
-
     useEffect(() => {
 
         const scenes = new THREE.Scene();
@@ -64,9 +63,6 @@ const Threejs = () => {
                 animate();
             
               }, []);
-
-
-
    
 
     
