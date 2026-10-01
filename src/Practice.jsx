@@ -1,95 +1,102 @@
-import  { useEffect } from 'react'
-import * as THREE from "three"
+import { useEffect } from 'react'
+import * as THREE  from "three"
 const Practice = () => {
 
-
-    useEffect(() => {
-
- const size = 
- {
-    width : window.innerWidth,
-    height : window.innerHeight
- }
-
- 
+  useEffect(() => {
 
 
-        const scene = new THREE.Scene();
-        const timer = new THREE.Timer();
-     scene.background = new THREE.Color("white")
 
-        // mesh
-        const geo = new THREE.TorusGeometry(1, 0.4, 16, 32);
+    const size =  {
 
-        const material = new THREE.MeshBasicMaterial({
-            color:"red"
-        })
-
-        const cube = new THREE.Mesh(geo,material);
-
-        cube.rotation.set(Math.PI / 2, Math.PI / 4,0);
-        scene.add(cube);
-
-        // camera
-
-        const camera = new THREE.PerspectiveCamera(
-          75,
-          size.innerWidth / size.innerHeight,
-          0.1,
-          100
-        )
-
-        camera.position.z = 5
+      width: window.innerWidth,
+      height: window.innerHeight,
+    }
 
 
-        const canvas = document.querySelector("#webgl")
 
-        // render
+    const scene = new THREE.Scene();
+    const timer = new THREE.Timer();
+    const background = new THREE.Color("white")
+    scene.background = background;
+
+    // mesh
+
+    const geometery = new THREE.BoxGeometry(1,1,1);
+
+    const material = new THREE.MeshBasicMaterial({
+      color: "red",
+    })
+
+    const mesh = new THREE.Mesh(geometery,material);
+
+    mesh.rotation.set(Math.PI / 4,Math.PI / 4,Math.PI / 4);
+    scene.add(mesh)
+
+
+    const camera  = new THREE.PerspectiveCamera(
+      75,
+      size.innerWidth / size.innerHeight,
+      0.1,
+      100
+    )
+
+    camera.position.z = 3;
+
+
+    // render
+    
+
+  const canvas = document.querySelector("#webgl");
 
   const render = new THREE.WebGLRenderer({
     canvas:canvas
   })
 
-  render.setSize(
-    size.width,
-    size.height
-)
+  render.setSize(size.width,size.height);
+  render.render(scene,camera);
 
 
 
-window.addEventListener("resize",()=>{
+  // for moving the mesh
+
+  
+  function aniamte() {
+    timer.update();
+    const delta = timer.getDelta();
+    requestAnimationFrame(aniamte)
+mesh.rotation.y += delta;
+mesh.rotation.x += delta;
+render.render(scene,camera);
+    
+  }
+
+  aniamte();
+
+
+
+  function resize() {
     size.width = window.innerWidth;
     size.height = window.innerHeight;
 
+    render.setSize(size.width,size.height);
     camera.aspect = size.width / size.height;
     camera.updateProjectionMatrix();
-
-    render.setSize(
-        size.width,
-        size.height
-    )
     
-    
+  }
 
+  window.addEventListener("resize",resize);
 
-})
-
-
-function animate() {
-    timer.update();
-    const delta = timer.getDelta();
-   cube.rotation.x += delta;
-   cube.rotation.y += delta;
-   render.render(scene, camera);
-   requestAnimationFrame(animate);
-} animate() 
-    
-    }, [])
-    
-
+  resize()
+  
+ 
+  }, [])
+  
   return (
     <div>
-        <canvas id='webgl'></canvas>
+
+      <canvas id='webgl'>
+
+      </canvas>
       
     </div>
   )

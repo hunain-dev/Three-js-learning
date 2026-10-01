@@ -3,74 +3,83 @@ import * as THREE from "three"
 const Threejs = () => {
     useEffect(() => {
 
-        const scenes = new THREE.Scene();
-        const timer = new THREE.Timer();
-
-        // for backkground-color
-
-        // scenes.background = new THREE.Color("white");
-
-
-
-        // mesh (geometry, material, mesh)
-
-        const geo = new THREE.TorusGeometry(1, 0.4, 16, 32);
+        const size = 
+        {
+           width : window.innerWidth,
+           height : window.innerHeight
+        }
+       
         
-        const material = new THREE.MeshBasicMaterial({
-            color:"red"
-        })
-
-        const cube = new THREE.Mesh(geo,material)
-
-        cube.rotation.set(Math.PI / 2, Math.PI / 4,0);
-
-
-        scenes.add(cube)
-
-        
-        const camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        100    
-        )
-
-        camera.position.z = 4;
-
-
-        // render
-
-        const canvas = document.querySelector("#webgl")
-
-
-        const render = new THREE.WebGLRenderer({
-            canvas:canvas
-        })
-
-
-        render.setSize(
-            window.innerWidth,
-            window.innerHeight
-        )
-        
-        // render.render(scenes,camera)
-
-        function animate() {
-                  timer.update();
-                  const delta = timer.getDelta(); 
-
-                 
-                  cube.rotation.x += delta;
-                  cube.rotation.y += delta;
-            
-                  render.render(scenes, camera);
-                  requestAnimationFrame(animate);
-
-                }
-
-                animate();
-            
-              }, []);
+       
+       
+               const scene = new THREE.Scene();
+               const timer = new THREE.Timer();
+            scene.background = new THREE.Color("white")
+       
+               // mesh
+               const geo = new THREE.TorusGeometry(1, 0.4, 16, 32);
+       
+               const material = new THREE.MeshBasicMaterial({
+                   color:"red"
+               })
+       
+               const cube = new THREE.Mesh(geo,material);
+       
+               cube.rotation.set(Math.PI / 2, Math.PI / 4,0);
+               scene.add(cube);
+       
+               // camera
+       
+               const camera = new THREE.PerspectiveCamera(
+                 75,
+                 size.innerWidth / size.innerHeight,
+                 0.1,
+                 100
+               )
+       
+               camera.position.z = 5
+       
+       
+               const canvas = document.querySelector("#webgl")
+       
+               // render
+       
+         const render = new THREE.WebGLRenderer({
+           canvas:canvas
+         })
+       
+         render.setSize(
+           size.width,
+           size.height
+       )
+       
+       
+       function resize() {
+       
+         size.width = window.innerWidth;
+         size.height = window.innerHeight;
+       
+         camera.aspect = size.width / size.height;
+         camera.updateProjectionMatrix();
+       
+         render.setSize(size.width, size.height);
+       
+       
+       } 
+       window.addEventListener("resize",resize);
+       
+         resize();
+       
+       function animate() {
+           timer.update();
+           const delta = timer.getDelta();
+          cube.rotation.x += delta;
+          cube.rotation.y += delta;
+          render.render(scene, camera);
+          requestAnimationFrame(animate);
+       } animate() 
+           
+           }, [])
    
 
     
