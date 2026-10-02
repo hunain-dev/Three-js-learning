@@ -14,18 +14,18 @@ const Threejs = () => {
        
                const scene = new THREE.Scene();
                const timer = new THREE.Timer();
-            scene.background = new THREE.Color("white")
+            // scene.background = new THREE.Color("black");
        
                // mesh
-               const geo = new THREE.TorusGeometry(1, 0.4, 16, 32);
+               const geo = new THREE.BoxGeometry(10, 2,3,4,5);
        
                const material = new THREE.MeshBasicMaterial({
-                   color:"red"
+                   color:"blue"
                })
        
                const cube = new THREE.Mesh(geo,material);
        
-               cube.rotation.set(Math.PI / 2, Math.PI / 4,0);
+               cube.rotation.set(Math.PI / 1, Math.PI / 1,0);
                scene.add(cube);
        
                // camera

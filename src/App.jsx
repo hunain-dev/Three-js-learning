@@ -1,76 +1,109 @@
-// import { useEffect } from "react";
-// import * as THREE from "three";
-
-// function App() {
-//   useEffect(() => {
-//     const scene = new THREE.Scene();
-
-//     const geometry = new THREE.BoxGeometry(1, 1, 1);
-
-//     const material = new THREE.MeshBasicMaterial({
-//       color: "red",
-//     });
-
-//     const cube = new THREE.Mesh(geometry, material);
-  
-//     // cube.rotation.y = Math.PI / 4;
-//     // cube.rotation.set(Math.PI / 3, Math.PI / 4, 0);
-
-//     scene.add(cube);
-
-//     const camera = new THREE.PerspectiveCamera(
-//       75,
-//       window.innerWidth / window.innerHeight,
-//       0.1,
-//       100
-//     );
-
-//     camera.position.z = 3;
-
-//     const canvas = document.querySelector("#webgl");
-
-//     const renderer = new THREE.WebGLRenderer({
-//       canvas: canvas,
-//     });
-
-//     renderer.setSize(
-//       window.innerWidth,
-//       window.innerHeight
-//     );
-
-//     renderer.render(scene, camera);
-
-//     function animate() {
-//       requestAnimationFrame(animate);
-
-//       cube.rotation.x += 0.01;
-//       cube.rotation.y += 0.01;
-
-//       renderer.render(scene, camera);
-//     }
-
-//     animate();
-
-//   }, []);
-
-//   return <canvas id="webgl"></canvas>;
-// }
-
-// export default App; 
-
-
-import Practice from './Practice'
-// import Threejs from './Threejs'
-
+import { useEffect } from 'react'
+import * as THREE from "three"
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 const App = () => {
+  useEffect(() => {
+
+    const scene = new THREE.Scene();
+    const timer = new THREE.Timer();
+    const background = new THREE.Color("white")
+    scene.background = background;
+
+    const size = {
+      width : window.innerWidth,
+      height : window.innerHeight,
+    }
+
+    // mesh
+
+    const geometry = new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
+
+    const material = new THREE.MeshBasicMaterial({
+      color:"red",
+      wireframe:true
+    })
+
+    const cube = new THREE.Mesh(geometry,material);
+
+    scene.add(cube);
+
+
+    // camera
+
+    const camera = new THREE.PerspectiveCamera(
+   75,
+   size.innerWidth / size.innerHeight,
+   0.1,
+   100,
+    )
+
+    camera.position.z = 4;
+    camera.lookAt(0,0,0)
+
+
+    // render
+
+    const canvas = document.querySelector("#webgl");
+
+    
+    const renderer = new THREE.WebGLRenderer(
+      {
+      canvas: canvas
+      }
+    )
+
+    const controls = new OrbitControls(camera,renderer.domElement);
+    controls.enableDamping = true
+
+    renderer.setSize(
+      size.width,
+      size.height,
+    )
+
+    renderer.render(camera,scene);
+
+
+    function animate() {
+      timer.update();
+      controls.update();
+      const delta = timer.getDelta();
+      requestAnimationFrame(animate);
+
+      cube.rotation.x += delta;
+      cube.rotation.y += delta;
+      renderer.render(scene,camera);
+
+    }
+
+  
+    animate()
+
+
+    function resize() {
+      size.width = window.innerWidth;
+      size.height = window.innerHeight;
+  
+      renderer.setSize(size.width,size.height);
+      camera.aspect = size.width / size.height;
+      camera.updateProjectionMatrix();
+      
+    }
+  
+    window.addEventListener("resize",resize);
+  
+    resize()
+
+
+
+
+  }, [])
+  
   return (
     <div>
-      {/* <Threejs/> */}
-      <Practice/>
+      <canvas id='webgl'></canvas>
       
     </div>
   )
 }
 
 export default App
-

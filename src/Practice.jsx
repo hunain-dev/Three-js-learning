@@ -1,18 +1,15 @@
 import { useEffect } from 'react'
 import * as THREE  from "three"
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
 const Practice = () => {
 
   useEffect(() => {
-
-
-
     const size =  {
 
       width: window.innerWidth,
       height: window.innerHeight,
     }
-
-
 
     const scene = new THREE.Scene();
     const timer = new THREE.Timer();
@@ -21,15 +18,19 @@ const Practice = () => {
 
     // mesh
 
-    const geometery = new THREE.BoxGeometry(1,1,1);
+    // const geometery = new THREE.TorusGeometry(1, 0.4, 16, 100);
+    const geometery = new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
 
     const material = new THREE.MeshBasicMaterial({
       color: "red",
+      wireframe:true
     })
+
+
 
     const mesh = new THREE.Mesh(geometery,material);
 
-    mesh.rotation.set(Math.PI / 4,Math.PI / 4,Math.PI / 4);
+    // mesh.rotation.set(Math.PI / 4,Math.PI / 4,Math.PI / 4);
     scene.add(mesh)
 
 
@@ -40,7 +41,10 @@ const Practice = () => {
       100
     )
 
-    camera.position.z = 3;
+    camera.position.z = 4;
+    camera.lookAt(0,0,0);
+
+
 
 
     // render
@@ -48,12 +52,21 @@ const Practice = () => {
 
   const canvas = document.querySelector("#webgl");
 
-  const render = new THREE.WebGLRenderer({
+  const renderer = new THREE.WebGLRenderer({
     canvas:canvas
   })
 
-  render.setSize(size.width,size.height);
-  render.render(scene,camera);
+  renderer.setSize(size.width,size.height);
+
+  
+
+    // for camera moving
+
+    const controls = new OrbitControls(camera,renderer.domElement);
+    controls.enableDamping = true
+
+
+    renderer.render(scene,camera);
 
 
 
@@ -62,11 +75,12 @@ const Practice = () => {
   
   function aniamte() {
     timer.update();
+    controls.update();
     const delta = timer.getDelta();
     requestAnimationFrame(aniamte)
 mesh.rotation.y += delta;
 mesh.rotation.x += delta;
-render.render(scene,camera);
+renderer.render(scene,camera);
     
   }
 
@@ -78,7 +92,7 @@ render.render(scene,camera);
     size.width = window.innerWidth;
     size.height = window.innerHeight;
 
-    render.setSize(size.width,size.height);
+    renderer.setSize(size.width,size.height);
     camera.aspect = size.width / size.height;
     camera.updateProjectionMatrix();
     
