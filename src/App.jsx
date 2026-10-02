@@ -16,11 +16,33 @@ const App = () => {
 
     // mesh
 
-    const geometry = new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
+    // const geometry = new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
+
+
+    // making a own custom geometry
+
+
+   const geometry  =  new THREE.BufferGeometry();
+
+    const count  = 50;  
+
+    const positionarray = new Float32Array(count *3 * 3);
+
+
+    for(let i = 0; i < count*3*3; i++ ){
+      positionarray[i] = (Math.random() - 0.5) *4;
+
+
+    }
+
+    geometry.setAttribute("position",new THREE.BufferAttribute(positionarray,3))
+
+
+  
 
     const material = new THREE.MeshBasicMaterial({
       color:"red",
-      wireframe:true
+      // wireframe:true
     })
 
     const cube = new THREE.Mesh(geometry,material);
