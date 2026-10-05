@@ -63,7 +63,7 @@ load.colorSpace = THREE.SRGBColorSpace
       100,
     );
 
-    camera.position.z = 3;
+    camera.position.z = 2;
     camera.lookAt(0,0,0)
 
 
@@ -78,7 +78,7 @@ load.colorSpace = THREE.SRGBColorSpace
 
     renderer.setSize(sizer.width, sizer.height);
 
-    renderer.render(scene, camera);
+    renderer.render(camera,scene)
 
     const controls = new OrbitControls(camera,renderer.domElement);
 controls.enableDamping = true
@@ -88,10 +88,9 @@ controls.enableDamping = true
         controls.update();
         const delta = timer.getDelta();
         requestAnimationFrame(animate);
-        // mesh.rotation.y += delta;
-        // mesh.rotation.y += delta;
-  
-        renderer.render(scene,camera)
+        mesh.rotation.x += delta;
+        mesh.rotation.y += delta;
+        renderer.render(camera,scene)
       }
       animate();
 
